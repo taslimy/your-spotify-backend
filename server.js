@@ -5,13 +5,8 @@ let querystring = require("querystring");
 
 let app = express();
 
-let FRONTEND_URI = process.env.FRONTEND_URI || "http://localhost:3000";
-let REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:8888/callback";
-
-// if (process.env.NODE_ENV !== "production") {
-//   REDIRECT_URI = "http://localhost:8888/callback";
-//   FRONTEND_URI = "http://localhost:3000";
-// }
+let FRONTEND_URI = process.env.FRONTEND_URI;
+let REDIRECT_URI = process.env.REDIRECT_URI;
 
 app.get("/login", function(req, res) {
   res.redirect(
@@ -38,7 +33,7 @@ app.get("/callback", function(req, res) {
     headers: {
       Authorization:
         "Basic " +
-        new Buffer(
+        new Buffer.from(
           process.env.SPOTIFY_CLIENT_ID +
             ":" +
             process.env.SPOTIFY_CLIENT_SECRET
@@ -50,7 +45,7 @@ app.get("/callback", function(req, res) {
     let access_token = body.access_token;
     let refresh_token = body.refresh_token;
     console.log(access_token, refresh_token);
-    let uri = FRONTEND_URI || "http://localhost:3000";
+    let uri = FRONTEND_URI;
     res.redirect(
       uri + "?access_token=" + access_token + "&refresh_token=" + refresh_token
     );
